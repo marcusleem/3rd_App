@@ -1,5 +1,6 @@
 package com.marcus.a3rd_app;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,12 +9,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignIn extends AppCompatActivity {
     private EditText Email;
     private EditText Password;
     private Button Login;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
     private TextView forgotPassword;
 
     @Override
@@ -25,6 +35,16 @@ public class SignIn extends AppCompatActivity {
         Login = (Button) findViewById(R.id.btnLogin);
         forgotPassword = (TextView)findViewById(R.id.tvForgetPassword);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        if (user != null) {
+            finish();
+            startActivity(new Intent(SignIn.this, MainPage.class));
+        }
+
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,8 +52,7 @@ public class SignIn extends AppCompatActivity {
                     Toast.makeText(SignIn.this, "Please enter your email and password above", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Intent intent = new Intent(SignIn.this, MainPage.class);
-                    startActivity(intent);
+                    validate(Email.getText().toString(), Password.getText().toString());
                 }
             }
         });
@@ -46,6 +65,29 @@ public class SignIn extends AppCompatActivity {
         });
 
     }
+
+    private void validate(String userEmail, String userPassword) {
+
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+
+
+        firebaseAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    progressDialog.dismiss();
+                    startActivity(new Intent(SignIn.this, MainPage.class));
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(SignIn.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+    }
+
     public void ForgetPassword(View view) {
         Intent intent = new Intent(this, ForgetPassword.class);
         startActivity(intent);

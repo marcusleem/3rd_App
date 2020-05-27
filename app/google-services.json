@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "32819263218",
+    "firebase_url": "https://rd-app-e8735.firebaseio.com",
+    "project_id": "rd-app-e8735",
+    "storage_bucket": "rd-app-e8735.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32819263218:android:ca863df9ba5faf4753026b",
+        "android_client_info": {
+          "package_name": "com.marcus.a3rd_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32819263218-u1lv6boqreicekv5birg820hg4hu9jni.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7Ca6jBww7z7V7D5TwEDhqBI-Rs43RITo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32819263218-u1lv6boqreicekv5birg820hg4hu9jni.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

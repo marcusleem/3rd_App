@@ -7,12 +7,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUp extends AppCompatActivity {
 
-    EditText userName, userPassword, userEmail;
-    Button regButton;
+    private EditText userName, userPassword, userEmail;
+    private Button regButton;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,27 +27,42 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         setupUIViews();
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(userName.length()== 0 || userPassword.length()==0 || userEmail.length()==0){
-                    Toast.makeText(SignUp.this, "Please enter your username, password and email above", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Intent intent = new Intent(SignUp.this, SignIn.class);
-                    startActivity(intent);
+                if (validate()) {
+                    String user_email = userEmail.getText().toString().trim();
+                    String user_password = userPassword.getText().toString().trim();
+
+                    firebaseAuth.createUserWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if(task.isSuccessful()) {
+                                Toast.makeText(SignUp.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SignUp.this, SignIn.class));
+                            }else{
+                                Toast.makeText(SignUp.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
         });
     }
-        public void setupUIViews () {
-            userName = (EditText) findViewById(R.id.etUserName);
-            userEmail = (EditText) findViewById(R.id.etUserEmail);
-            userPassword = (EditText) findViewById(R.id.etUserPassword);
-            regButton = (Button) findViewById(R.id.btnRegister);
-        }
 
-    public Boolean validate () {
+
+    private void setupUIViews () {
+        userName = (EditText) findViewById(R.id.etUserName);
+        userEmail = (EditText) findViewById(R.id.etUserEmail);
+        userPassword = (EditText) findViewById(R.id.etUserPassword);
+        regButton = (Button) findViewById(R.id.btnRegister);
+    }
+
+
+    private Boolean validate () {
         Boolean result = false;
 
         String name = userName.getText().toString();

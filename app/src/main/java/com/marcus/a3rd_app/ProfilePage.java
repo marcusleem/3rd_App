@@ -9,13 +9,19 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class ProfilePage extends AppCompatActivity {
 
-    Button logout;
+    private FirebaseAuth firebaseAuth;
+    private Button logout;
+
     @Override
  protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         logout = (Button)findViewById(R.id.btnLogout);
 
@@ -26,11 +32,6 @@ public class ProfilePage extends AppCompatActivity {
             }
         });
     }
-
-public void Logout(){
-    finish();
-    startActivity(new Intent(ProfilePage.this, MainActivity.class));
-}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,8 +65,14 @@ public void Logout(){
         startActivity(intent);
     }
 
+    private void Logout(){
+        firebaseAuth.signOut();
+        finish();
+        startActivity(new Intent(ProfilePage.this, MainActivity.class));
+    }
+
     public void logout(View view) {
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
