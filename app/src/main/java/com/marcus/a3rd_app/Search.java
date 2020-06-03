@@ -33,22 +33,23 @@ public class Search extends AppCompatActivity {
     }
 
     private void validate(String Search){
-        if((Search.equals("Fruit"))) {
+        if((Search.equals("Fruits"))){
             Intent intent = new Intent(Search.this, FruitPage.class);
             startActivity(intent);
-        }else if((Search.equals("Vegetable"))){
+        }else if((Search.equals("Vegetables"))){
                 Intent intent = new Intent(Search.this, VegPage.class);
                 startActivity(intent);
         }else if((Search.equals("Rice"))){
             Intent intent = new Intent(Search.this, RicePage.class);
             startActivity(intent);
-        }else if((Search.equals("Biscuit"))){
+        }else if((Search.equals("Biscuits"))){
             Intent intent = new Intent(Search.this, BiscPage.class);
             startActivity(intent);
         }else{
             Toast.makeText(Search.this, "Please enter a category!", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public void backarrow8(View view) {
         Intent intent = new Intent(this,MainPage.class);
